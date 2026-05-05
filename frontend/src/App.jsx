@@ -82,16 +82,22 @@ export default function App() {
       analysisProgress.startProgress();
 
       try {
-        const res = await axios.post('/api/analyze', { url, tone }, { timeout: 120000 });
-
+        const API = import.meta.env.VITE_API_URL;
+      
+        const res = await axios.post(
+          `${API}/api/analyze`,
+          { url, tone },
+          { timeout: 120000 }
+        );
+      
         await analysisProgress.finalizeSuccess();
-
+      
         setResult(res.data);
         setPhase('result');
       } catch (err) {
         analysisProgress.cancelProgress();
         analysisProgress.resetProgress();
-
+      
         const msg =
           err.response?.data?.error || err.message || 'An unexpected error occurred.';
         setError(msg);
